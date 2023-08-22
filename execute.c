@@ -1,3 +1,6 @@
+#include <unistd.h>
+#include <sys/wait.h>
+#include <stdio.h>
 #include "main.h"
 
 /**
@@ -15,5 +18,18 @@
 int execute(char **args, char *const env_vars[])
 {
 	/**code here**/
+	int child, status;
+
+	if (does_path_exist(args[0]) == 0)
+		return (-1);
+
+	child = fork();
+	if (child < 0)
+		perror("could not form child");
+	else if (child == 0)
+		execve(args[0], args, env_vars);
+	else
+		wait(&status);
+
 	return (1);
 }
