@@ -31,5 +31,7 @@ int execute(char **args, char *const env_vars[])
 	else
 		wait(&status);
 
+	free_args(args);
+
 	return (1);
 }
