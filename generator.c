@@ -6,7 +6,7 @@
 
 /**
  * generator - generates an array of arguments to passed onto execve.
-v===== * The string at index 0 is the file path location.
+ * The string at index 0 is the file path location.
  *
  * @command: is the passed command requiring prepending.
  * @env_vars: is the list of environment variables.
@@ -32,30 +32,30 @@ char **generator(char *command, char *const env_vars)
 
 	char *first_var = prepend(hold_first_token);
 
-	args[0] = malloc(sizeof(char) * _strlen(first_var)); /**needs to be freed**/
+	args[0] = malloc(sizeof(char) * (_strlen(first_var) + 1));
 	strcpy(args[0], first_var);
-	free(first_var);
+	free(first_var);/**freeing because in the prepend fx, strdup was used**/
 
 	count = 1;
 	while (token != NULL)
 	{
 		token = strtok(NULL, delim);
-		if (token == NULL)
-			break;
-
-		len = _strlen(token);
-		args[count] = malloc(sizeof(char) * len);/**to be freed**/
-		strcpy(args[count], token);
-		count++;
+		if (token != NULL)
+		{
+			len = _strlen(token) + 1;/**added one to account for the null terminator**/
+			args[count] = malloc(sizeof(char) * len);/**to be freed**/
+			strcpy(args[count], token);
+			count++;
+		}
 	}
 	args[count] = NULL;
 	free(buffer);
-	printf("My token j1 is %s\n", args[1]);
+	free(hold_first_token);
 	return (args);
 }
 
 /**
- * _strlen - gets the length of a string. including
+ * _strlen - gets the length of a string. excluding
  * the null terminator \0.
  *
  * @str: string whose length is to be found.
@@ -70,7 +70,7 @@ int _strlen(char *str)
 	while (str[len] != '\0')
 		len++;
 
-	return (len + 1);
+	return (len);
 }
 
 /**
@@ -78,16 +78,18 @@ int _strlen(char *str)
  * inclusive of NULL.
  *
  * @str: string passed.
- * Return: length of array needed.
+ * Return: length of array needed else -1 if error occured
  */
 
 int total_array_length(char *str)
 {
-	char *buffer;
 	int count_tokens;
 	const char delim[] = " ";
 
-	buffer = strdup(str);
+	char *buffer = strdup(str);
+
+	if (buffer == NULL)
+		return (-1);
 	count_tokens = 0;
 	char *token = strtok(buffer, delim);
 
@@ -116,4 +118,23 @@ int does_path_exist(char *path)
 	if (access(path, F_OK) == 0)
 		return (1);
 	return (0);
+}
+
+/**
+ * free_args - this function frees args preventing memory leaks.
+ * should after you are done using args contents.
+ * @args: array of strings
+ */
+
+void free_args(char **args)
+{
+	int index = 0;
+
+	while (args[index] != NULL)
+	{
+		free(args[index]);
+		index++;
+	}
+
+	free(args);
 }
