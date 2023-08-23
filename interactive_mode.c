@@ -79,4 +79,4 @@ int _strcmp(char *str_1, char *str_2)
 		index++;
 	}
 	return (1);
-}	
+}
