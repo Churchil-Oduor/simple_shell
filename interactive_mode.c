@@ -39,7 +39,7 @@ void interactive_mode(char *file_name, char *const env_vars[])
 		}
 
 		if (_strcmp(command, "exit") == 1)
-			break;
+			exit(EXIT_SUCCESS);
 
 		args = generator(command);
 		/**
@@ -78,6 +78,5 @@ int _strcmp(char *str_1, char *str_2)
 			return (0);
 		index++;
 	}
-	return (1);
-}
-
+	return (1)
+}	
