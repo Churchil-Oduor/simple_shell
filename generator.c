@@ -15,7 +15,7 @@
 
 char **generator(char *command)
 {
-	char *buffer, *token, *hold_first_token, **args, *first_var;
+	char *buffer, *token, **args, *first_var;
 	const char delim[] = " ";
 	int arr_len, len, count;
 
@@ -25,15 +25,10 @@ char **generator(char *command)
 	len = 0;
 
 	token = strtok(buffer, delim);
-	hold_first_token = strdup(token);/**needs to be freed**/
-	if (hold_first_token == NULL)
-		return (NULL);
-
-	first_var = prepend(hold_first_token);
+	first_var = prepend(token);
 
 	args[0] = malloc(sizeof(char) * (_strlen(first_var) + 1));
 	strcpy(args[0], first_var);
-	free(first_var);/**freeing because in the prepend fx, strdup was used**/
 
 	count = 1;
 	while (token != NULL)
@@ -48,8 +43,9 @@ char **generator(char *command)
 		}
 	}
 	args[count] = NULL;
+	free(first_var);/**freeing because in the prepend fx, strdup was used**/
 	free(buffer);
-//	free(hold_first_token);
+
 	return (args);
 }
 

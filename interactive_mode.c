@@ -1,6 +1,9 @@
 #include <unistd.h>
 #include "main.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define BUFFER_SIZE 1024
 
 /**
  * interactive_mode - the function managing interactive mode.
@@ -13,5 +16,39 @@
 
 void interactive_mode(char *file_name, char *const env_vars[])
 {
-	/**code**/
+	while (1)
+	{
+		size_t len;
+		char **args, *command, *prompt_symbol;
+
+		len = 0;
+		command = NULL;
+		prompt_symbol = "($) ";
+		write(STDOUT_FILENO, prompt_symbol, 4);
+		len = getline(&command, &len, stdin); /**command should be freed**/
+		command[len - 1] = '\0';/** null terminate**/
+		args = generator(command);
+		if (len == 0)
+			exit(100);
+		/**
+		 * do an error check
+		 */
+		if (does_path_exist(args[0]) == 0)
+			error_msg(1, file_name, command);
+		else
+			execute(args, env_vars);
+
+		free(command);
+	}
+}
+
+/**
+ * signal_handler - handles CTRL+C and CTRL+D interrupts.
+ * @signum: signal number to be handled.
+ * Return: signal number signum.
+ */
+
+int signal_handler(int signum __attribute__((unused)))
+{
+	return (0);
 }

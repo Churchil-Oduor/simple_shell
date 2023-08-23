@@ -2,7 +2,8 @@
 #include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
-#define BUFFER_SIZE 1024
+#include <string.h>
+#define BUFFER_SIZE 512
 
 /**
  * non_interactive_mode - the function managing interactive mode.
@@ -15,15 +16,20 @@
 
 void non_interactive_mode(char *file_name, char *const env_vars[])
 {
-	char command[BUFFER_SIZE], **args;
+	char *command, **args;
 	int read_bytes;
 
-	read_bytes = read(STDIN_FILENO, command, BUFFER_SIZE);
+	command = malloc(sizeof(char) * BUFFER_SIZE);
 
+	if (command == NULL)
+		exit(EXIT_FAILURE);
+
+
+	read_bytes = read(STDIN_FILENO, command, BUFFER_SIZE);
 	if (read_bytes < 0)
 	{
 		perror("Error reading command from terminal");
-		exit(100);
+		exit(EXIT_FAILURE);
 	}
 	command[read_bytes - 1] = '\0';
 	args = generator(command);
@@ -35,5 +41,5 @@ void non_interactive_mode(char *file_name, char *const env_vars[])
 		error_msg(0, file_name, command);
 	else
 		execute(args, env_vars);
+	free(command);
 }
-
