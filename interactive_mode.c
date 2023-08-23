@@ -19,17 +19,23 @@ void interactive_mode(char *file_name, char *const env_vars[])
 	while (1)
 	{
 		size_t len;
+		ssize_t response;
 		char **args, *command, *prompt_symbol;
 
 		len = 0;
 		command = NULL;
 		prompt_symbol = "($) ";
 		write(STDOUT_FILENO, prompt_symbol, 4);
-		len = getline(&command, &len, stdin); /**command should be freed**/
+		response = getline(&command, &len, stdin); /**command should be freed**/
+
+		if (response == -1)
+		{
+			write(STDOUT_FILENO, "\n", 1);
+			free(command);
+			break;
+		}
 		command[len - 1] = '\0';/** null terminate**/
 		args = generator(command);
-		if (len == 0)
-			exit(100);
 		/**
 		 * do an error check
 		 */
@@ -37,8 +43,8 @@ void interactive_mode(char *file_name, char *const env_vars[])
 			error_msg(1, file_name, command);
 		else
 			execute(args, env_vars);
-
 		free(command);
+
 	}
 }
 
