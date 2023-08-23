@@ -14,7 +14,7 @@
  * Return: always 1.
  */
 
-int main(int ac, char **args __attribute__((unused)),
+int main(int ac __attribute__((unused)), char **args __attribute__((unused)),
 		char *const env_vars[] __attribute__((unused)))
 {
 

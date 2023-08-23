@@ -11,5 +11,6 @@ int total_array_length(char *str);
 int _strlen(char *str);
 int does_path_exist(char *str);
 void free_args(char **args);
+int error_msg(int mode, char *file_name, char *path);
 
 #endif

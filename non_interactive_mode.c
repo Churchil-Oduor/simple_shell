@@ -15,8 +15,8 @@
 
 void non_interactive_mode(char *file_name, char *const env_vars[])
 {
-	char *command, **args;
-	size_t read_bytes;
+	char command[BUFFER_SIZE], **args;
+	int read_bytes;
 
 	read_bytes = read(STDIN_FILENO, command, BUFFER_SIZE);
 
@@ -27,6 +27,13 @@ void non_interactive_mode(char *file_name, char *const env_vars[])
 	}
 	command[read_bytes - 1] = '\0';
 	args = generator(command);
-	execute(args, env_vars);	
+
+	/**
+	 * do an error check
+	 */
+	if (does_path_exist(args[0]) == 0)
+		error_msg(0, file_name, command);
+	else
+		execute(args, env_vars);
 }
 

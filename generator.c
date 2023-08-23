@@ -15,7 +15,7 @@
 
 char **generator(char *command)
 {
-	char *buffer, *token, *hold_first_token, **args;
+	char *buffer, *token, *hold_first_token, **args, *first_var;
 	const char delim[] = " ";
 	int arr_len, len, count;
 
@@ -29,7 +29,7 @@ char **generator(char *command)
 	if (hold_first_token == NULL)
 		return (NULL);
 
-	char *first_var = prepend(hold_first_token);
+	first_var = prepend(hold_first_token);
 
 	args[0] = malloc(sizeof(char) * (_strlen(first_var) + 1));
 	strcpy(args[0], first_var);
@@ -83,14 +83,15 @@ int _strlen(char *str)
 int total_array_length(char *str)
 {
 	int count_tokens;
+	char *token, *buffer;
 	const char delim[] = " ";
 
-	char *buffer = strdup(str);
+	buffer = strdup(str);
 
 	if (buffer == NULL)
 		return (-1);
 	count_tokens = 0;
-	char *token = strtok(buffer, delim);
+	token = strtok(buffer, delim);
 
 	while (token != NULL)
 	{
@@ -127,8 +128,9 @@ int does_path_exist(char *path)
 
 void free_args(char **args)
 {
-	int index = 0;
+	int index;
 
+	index = 0;
 	while (args[index] != NULL)
 	{
 		free(args[index]);
