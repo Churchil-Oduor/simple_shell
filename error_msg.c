@@ -20,15 +20,16 @@ int error_msg(int mode, char *file_name, char *path)
 	int file_length, path_length;
 
 	file_length = _strlen(file_name);
-	path_length = _strlen(path);
 	if (mode == 1)
 	{
 		write(STDOUT_FILENO, file_name, file_length);
 		write(STDOUT_FILENO, ": No such file or directory", 27);
+		write(STDOUT_FILENO, "\n", 1);
 		return (1);
 	}
 	else if (mode == 0)
 	{
+		path_length = _strlen(path);
 		write(STDOUT_FILENO, file_name, file_length);
 		write(STDOUT_FILENO, ": 1: ", 5);
 		write(STDOUT_FILENO, path, path_length);

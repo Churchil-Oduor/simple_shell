@@ -49,7 +49,7 @@ char **generator(char *command)
 	}
 	args[count] = NULL;
 	free(buffer);
-	free(hold_first_token);
+//	free(hold_first_token);
 	return (args);
 }
 
