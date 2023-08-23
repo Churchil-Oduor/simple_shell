@@ -5,6 +5,8 @@
 #include <string.h>
 #define BUFFER_SIZE 1024
 
+
+int _strcmp(char *str_1, char *str_2);
 /**
  * interactive_mode - the function managing interactive mode.
  *
@@ -28,13 +30,17 @@ void interactive_mode(char *file_name, char *const env_vars[])
 		write(STDOUT_FILENO, prompt_symbol, 4);
 		response = getline(&command, &len, stdin); /**command should be freed**/
 
+		command[response - 1] = '\0';/** null terminal**/
+
 		if (response == -1)
 		{
-			write(STDOUT_FILENO, "\n", 1);
 			free(command);
 			break;
 		}
-		command[len - 1] = '\0';/** null terminate**/
+
+		if (_strcmp(command, "exit") == 1)
+			break;
+
 		args = generator(command);
 		/**
 		 * do an error check
@@ -49,12 +55,29 @@ void interactive_mode(char *file_name, char *const env_vars[])
 }
 
 /**
- * signal_handler - handles CTRL+C and CTRL+D interrupts.
- * @signum: signal number to be handled.
- * Return: signal number signum.
+ * _strcmp - compares two strings.
+ * @str_1: string 1.
+ * @str_2: string 2.
+ * Return: 1 if equal 0 if not equal.
  */
 
-int signal_handler(int signum __attribute__((unused)))
+int _strcmp(char *str_1, char *str_2)
 {
-	return (0);
+	int len_1, len_2, index;
+
+	len_1 = _strlen(str_1);
+	len_2 = _strlen(str_2);
+
+	if (len_1 != len_2)
+		return (0);
+
+	index = 0;
+	while (index != len_1)
+	{
+		if (str_1[index] != str_2[index])
+			return (0);
+		index++;
+	}
+	return (1);
 }
+
