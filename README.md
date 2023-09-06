@@ -27,6 +27,6 @@ The simple-shell's ability to handle file inputs and exit status functionality h
 
 Project done and compiled by,
 
-Holland Nyadimo, < naftaliholland01@gmai.com >,
+Holland Nyadimo, < naftaliholland01@gmail.com >,
 
 Churchil Okech < churchilokechoduor@gmail.com >
